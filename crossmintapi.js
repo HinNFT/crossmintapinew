@@ -20,11 +20,14 @@ const db = mysql.createConnection({
 
 app.post('/webhook', (req,res) => {
   const whPassThroughArgs = req.body.whPassThroughArgs
-  const referralcode = whPassThroughArgs.referral
-  const amount = whPassThroughArgs.amount
+  const args = JSON.parse(whPassThroughArgs);
+  const referralCode = args.referral
+  const amount = args.amount
+
+  console.log(args)
 
   db.query(
-    "INSERT INTO crossmintusers (referralcode, amount) VALUES ('?,?')", 
+    "INSERT INTO crossmintusers (referralcode, amount) VALUES (?,?)", 
     [referralCode, amount], 
     (err, result) => {
       if(err) {
@@ -36,8 +39,6 @@ app.post('/webhook', (req,res) => {
       
     })
 })
-
-
 
 db.connect(function(err){
 
